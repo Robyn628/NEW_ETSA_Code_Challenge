@@ -1,0 +1,21 @@
+﻿@model Code_Challenge.Models.CreateUserViewModel
+@{
+}
+
+<h1>Create User</h1>
+<form method="post" action="Create" class="mt-5">
+    <div class="mb-3">
+        <label for="" class="form-label">User Name</label>
+        <input type="text" class="form-control" asp-for="Username">
+    </div>
+    <div class="mb-3">
+        <label for="" class="form-label">Email</label>
+        <input type="email" class="form-control" asp-for="Email">
+    </div> 
+    <div class="mb-3">
+        <label for="" class="form-label">Password</label>
+        <input type="password" class="form-control" asp-for="Password">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

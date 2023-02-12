@@ -1,0 +1,29 @@
+﻿@model List<Code_Challenge.Models.UserModel.User>
+@{
+}
+
+<h1>List of Users</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th> </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Username</td>
+                <td>@user.Email</td>
+                <td>@user.Password</td>
+                <td><a href="User/Edit/@user.Id">Edit</a></td> 
+            </tr>
+        }
+    </tbody>
+</table>
