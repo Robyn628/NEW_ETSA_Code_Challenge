@@ -1,8 +1,11 @@
 ﻿using Code_Challenge.DB;
 using Code_Challenge.Models;
-using Code_Challenge.Models.UserModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using System.Data;
+using System.Diagnostics;
+using Code_Challenge.Models.UserModel;
 
 namespace Code_Challenge.Controllers
 {
@@ -26,6 +29,42 @@ namespace Code_Challenge.Controllers
         }
 
 
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
+        }
+
+
+        [HttpGet]
+        public FileResult ExportExcel()
+        {
+            string[] colNames = new string[] { "Id", "Username", "Email", "Password" };
+
+            string csv = string.Empty;
+
+            foreach(string colName in colNames)
+            {
+                csv += colName + ',';
+            }
+
+            csv += "\r\n";
+
+            foreach (var users in userDBContext.Users.ToList())
+            {
+                csv += users.Id.ToString().Replace(",", ",") + ',';
+                csv += users.Username.Replace(",", ",") + ',';
+                csv += users.Email.Replace(",", ",") + ',';
+                csv += users.Password.Replace(",", ",") + ',';
+
+                csv += "\r\n";
+            }
+
+            byte[] bytes = Encoding.ASCII.GetBytes(csv);
+            return File(bytes, "text/csv", "User.csv");
+        }
+
+
+
         //Create new user Page
 
         [HttpGet]
@@ -35,23 +74,26 @@ namespace Code_Challenge.Controllers
         }
 
 
+
+
         //Function to create a new user, new user is saved to the database
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel addUser)
+        public async Task<IActionResult> Create(CreateUserViewModel createUser)
         {
             var user = new User()
             {
-                Id = addUser.Id,
-                Username = addUser.Username,
-                Email = addUser.Email,
-                Password = addUser.Password
+                Id = createUser.Id,
+                Username = createUser.Username,
+                Email = createUser.Email,
+                Password = createUser.Password
             };
 
             await userDBContext.Users.AddAsync(user);
             await userDBContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
 
 
         //Retrieve the user from the database on the Index page that will be edited
@@ -80,11 +122,11 @@ namespace Code_Challenge.Controllers
         // Edit a user, changes are saved to the Database
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditUserViewModel edit)      
+        public async Task<IActionResult> Edit(EditUserViewModel edit)
         {
             var user = await userDBContext.Users.FindAsync(edit.Id);
 
-            if(user != null)
+            if (user != null)
             {
                 user.Username = edit.Username;
                 user.Email = edit.Email;
@@ -101,7 +143,7 @@ namespace Code_Challenge.Controllers
         //Delete a user in the Edit page, deletes the user from the database
 
         [HttpPost]
-        public async Task<IActionResult> Delete(EditUserViewModel delete)      
+        public async Task<IActionResult> Delete(EditUserViewModel delete)
         {
             var user = await userDBContext.Users.FindAsync(delete.Id);
 
@@ -113,6 +155,38 @@ namespace Code_Challenge.Controllers
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
+        }
+
+
+        [HttpGet]
+        public IActionResult LoginIndex()
+        {
+            Login loginView = new Login();
+            return View(loginView);
+        }
+
+
+        [HttpPost]
+        public IActionResult LoginIndex(Login loginView)
+        {
+            UserDBContext _userDBContext = new UserDBContext();
+            var status = _userDBContext.Users.Where(m => m.Username == loginView.Username && m.Password == loginView.Password).FirstOrDefault();
+
+            if(status == null)
+            {
+                ViewBag.LoginStatus = 0;
+            }
+            else
+            {
+                return RedirectToAction("Success");
+            }
+
+            return View(loginView);
+        }
+
+        public IActionResult Success()
+        {
+            return View("Index");
         }
     }
 }

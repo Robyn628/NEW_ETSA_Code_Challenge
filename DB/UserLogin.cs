@@ -1,8 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Code_Challenge.Models.UserModel
+namespace Code_Challenge.Data
 {
-    public class User
+    public partial class UserLogin
     {
         public int Id { get; set; }
         public string Username { get; set; }

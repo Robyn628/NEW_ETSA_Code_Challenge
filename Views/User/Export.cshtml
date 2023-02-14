@@ -1,0 +1,35 @@
+﻿@using DocumentFormat.OpenXml.Office2010.Excel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div style="margin-top:50px;">
+    <div align="right">
+        <a href="/User/ExportExcel">Export Data</a>
+    </div>
+
+    <table class="table table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (System.Data.DataRow user in ViewBag.details.Rows)
+            {
+                <tr>
+                    <td>@user.[Id]</td>
+                    <td>@user.[Username]</td>
+                    <td>@user.[Email]</td>
+                    <td>@user.[Password]</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
