@@ -3,22 +3,24 @@
 @{
 }
 
+<h1>Login</h1>
 
-    <div class="login">
-        <h1>Login</h1>
-
-             <form method="post" action="Login" asp-controller="User" asp-action="Index">
-            <div class="mb-3">
-                <label for="" class="form-label">User Name</label>
-                <input type="text" class="form-control" asp-for="Username">
-            </div>
-            <div class="mb-3">
-                <label for="" class="form-label">Password</label>
-                <input type="password" class="form-control" asp-for="Password">
-            </div>
-                <p class="submit">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </p>     
-        </form>
+<form method="post" action="Login" class="mt-5">
+    <div class="mb-3">
+        <label for="" class="form-label">User Name</label>
+        <input type="text" class="form-control" asp-for="Username" required>
     </div>
-
+    <div class="mb-3">
+        <label for="" class="form-label">Password</label>
+        <input type="password" class="form-control" asp-for="Password" required>
+    </div>
+    <div class="form-group error">
+        @if (@ViewBag.status != null)
+        {
+            <label> @ViewBag.NotValidUser</label>
+        }
+    </div>
+    <p class="submit">
+        <button type="submit" class="btn btn-primary">Login</button>
+    </p>
+</form>

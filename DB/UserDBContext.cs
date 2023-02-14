@@ -43,7 +43,7 @@ namespace Code_Challenge.DB
 
         private void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

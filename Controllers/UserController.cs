@@ -6,6 +6,7 @@ using System.Text;
 using System.Data;
 using System.Diagnostics;
 using Code_Challenge.Models.UserModel;
+using Windows.UI.Popups;
 
 namespace Code_Challenge.Controllers
 {
@@ -158,19 +159,21 @@ namespace Code_Challenge.Controllers
         }
 
 
+        //Login to access export list
+
         [HttpGet]
-        public IActionResult LoginIndex()
+        public IActionResult Login()
         {
-            Login loginView = new Login();
-            return View(loginView);
+            Login login = new Login();
+            return View(login);
         }
 
 
         [HttpPost]
-        public IActionResult LoginIndex(Login loginView)
+        public IActionResult Login(Login login)
         {
             UserDBContext _userDBContext = new UserDBContext();
-            var status = _userDBContext.Users.Where(m => m.Username == loginView.Username && m.Password == loginView.Password).FirstOrDefault();
+            var status = _userDBContext.Users.Where(m => m.Username == login.Username && m.Password == login.Password).FirstOrDefault();
 
             if(status == null)
             {
@@ -181,12 +184,12 @@ namespace Code_Challenge.Controllers
                 return RedirectToAction("Success");
             }
 
-            return View(loginView);
+            return View(login);
         }
 
         public IActionResult Success()
         {
-            return View("Index");
+            return View("Export");
         }
     }
 }
